@@ -1,3 +1,5 @@
+const { matchedData } = require("express-validator");
+const {handleHttpError} = require('../utils/handleError');
 const { tracksModel } = require("../models"); // exportamos el index que obtiene todos los modelos
 
 // en los controllers es donde hare mi conexion a la bd, la logica de los metodos, etc
@@ -8,30 +10,52 @@ const { tracksModel } = require("../models"); // exportamos el index que obtiene
  * @param {*} req
  * @param {*} res
  */
-const getItems = (req, res) => {
-  //const data = tracksModel.find({}); // aca seleccionamos toda la data del modelo tracks
-  const data = ['hola', 'mundo'];
-  res.send({ data });
+const getItems = async (req, res) => {
+  try {
+    const data = await tracksModel.find({}).exec();
+    res.json({ data });
+  } catch (err) {
+    console.log(err);
+    handleHttpError(res, "ERROR_CREATE_ITEMS");
+  }
 };
 
 /**
- * Obtener detalle de la base de datos!
+ * Obtener un detalle
  * @param {*} req
  * @param {*} res
  */
-const getItem = (req, res) => {};
+const getItem = async (req, res) => {
+  try{
+    req = matchedData(req);
+    const {id} = req;
+    const data = await tracksModel.findById(id);
+    res.send({ data });
+  }catch(err){
+    console.log(err);
+    handleHttpError(res,"ERROR_GET_ITEM")
+  }
+};
 
 /**
  * Insertar un dato
  * @param {*} req
  * @param {*} res
  */
-const createItem = async(req, res) => {
-  console.log(res);  
-  const {body} = req
-  console.log(body);
-  // const data = await tracksModel.create(body);
-  res.send({algo:1});
+const createItem = async (req, res) => {
+  try {
+    const body = matchedData(req);
+    const data = await tracksModel.create(body);
+    res.send({ data });
+    /* 
+    aca podemos ejecutar 2 cosas ver como funciona el matchedData
+    const body = req;
+    const bodyClean = matchedData(req);
+    */
+  } catch (err) {
+    console.log(err);
+    handleHttpError(res, "ERROR_CREATE_ITEMS");
+  }
 };
 
 /**
@@ -39,13 +63,34 @@ const createItem = async(req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const updateItem = (req, res) => {};
+const updateItem = async (req, res) => {
+  try {
+    const {id, ...body} = matchedData(req); 
+    // al usar los 3 puntos decimos que id quedara en 1 array y el body en otro, osea los separamos
+    const data = await tracksModel.findByIdAndUpdate(id, body); // cambie findOneAndUpdate por findByIdAndUpdate 
+    res.send({ data });
+  } catch (err) {
+    console.log(err);
+    handleHttpError(res, "ERROR_UPDATE_ITEMS");
+  }
+
+};
 
 /**
  * Eliminar un dato
  * @param {*} req
  * @param {*} res
  */
-const deleteItem = (req, res) => {};
+const deleteItem = async (req, res) => {
+  try{
+    req = matchedData(req);
+    const {id} = req;
+    const data = await tracksModel.deleteOne({_id:id}); // con deleteOne se borra de tajo xD
+    res.send({ data });
+  }catch(err){
+    console.log(err);
+    handleHttpError(res,"ERROR_DELETE_ITEM")
+  }
+};
 
 module.exports = { getItems, getItem, createItem, updateItem, deleteItem };

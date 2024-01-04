@@ -38,7 +38,7 @@ const TracksScheme = new mongoose.Schema(
       },
     },
     mediaId:{
-        type: String
+        type: mongoose.Types.ObjectId
     }
   },
   // este apartado sirve para definir los atributos de medicion create_at, update_at

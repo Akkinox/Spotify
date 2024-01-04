@@ -16,7 +16,8 @@ app.use(cors())
 
 //aca debemos poner la sentencia que hace que podamos hacer un post, esto quiere decir
 // hace que funcione el express 
-app.use(express.json);
+app.use(express.json());
+app.use(express.static("storage")); // le estamos diciendo a express que ocupe los recursos de storage y los haga publico
 
 const port = process.env.PORT || 3000
 // de esta forma llamamos a las variables de entorno con process.env.PORT
