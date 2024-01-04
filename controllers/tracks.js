@@ -85,7 +85,7 @@ const deleteItem = async (req, res) => {
   try{
     req = matchedData(req);
     const {id} = req;
-    const data = await tracksModel.deleteOne({_id:id}); // con deleteOne se borra de tajo xD
+    const data = await tracksModel.delete({_id:id}); // con deleteOne se borra de tajo xD
     res.send({ data });
   }catch(err){
     console.log(err);

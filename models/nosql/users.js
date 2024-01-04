@@ -1,5 +1,7 @@
 // importamos a mongoose para hacer nuestro schema de usuario (Modelo)
 const mongoose = require("mongoose");
+const MongooseDelete = require("mongoose-delete");
+
 
 const UserScheme = new mongoose.Schema(
   // Aqui debemos dejar 2 bloques para usar
@@ -17,6 +19,7 @@ const UserScheme = new mongoose.Schema(
     },
     password: {
       type: String,
+      select: false
     },
     role: {
       type: ["user", "admin"],
@@ -29,6 +32,7 @@ const UserScheme = new mongoose.Schema(
     versionKey: false
   }
 );
+UserScheme.plugin(MongooseDelete, {overrideMethods: "all"});
 
 // Aca lo que exportamos el modelo y entre comillas dejamos el nombre de la tabla
 module.exports = mongoose.model("users", UserScheme);

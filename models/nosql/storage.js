@@ -1,5 +1,7 @@
 // importamos a mongoose para hacer nuestro schema de usuario (Modelo)
 const mongoose = require("mongoose");
+const MongooseDelete = require("mongoose-delete");
+
 
 const StorageScheme = new mongoose.Schema(
   // Aqui debemos dejar 2 bloques para usar
@@ -18,6 +20,7 @@ const StorageScheme = new mongoose.Schema(
     versionKey: false
   }
 );
+StorageScheme.plugin(MongooseDelete, {overrideMethods: "all"});
 
 // Aca lo que exportamos el modelo y entre comillas dejamos el nombre de la tabla
 module.exports = mongoose.model("storage", StorageScheme);
