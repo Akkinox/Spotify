@@ -12,8 +12,9 @@ const { tracksModel } = require("../models"); // exportamos el index que obtiene
  */
 const getItems = async (req, res) => {
   try {
+    const user = req.user;
     const data = await tracksModel.find({}).exec();
-    res.json({ data });
+    res.json({ data, user});
   } catch (err) {
     console.log(err);
     handleHttpError(res, "ERROR_CREATE_ITEMS");

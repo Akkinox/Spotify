@@ -9,6 +9,7 @@ const {
   getItem,
   deleteItem,
 } = require("../controllers/storage");
+const checkRol = require("../middleware/rol");
 // http://localhost:3001/api/storage
 
 /* 

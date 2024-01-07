@@ -4,6 +4,10 @@ require("dotenv").config()
 const express = require("express")
 // express es la libreria que no permite levantar un servidor web o servicio web
 const cors = require("cors")
+// Agragamos el nuevo paquete de morgan-body
+const morganBody = require("morgan-body");
+const loggerStream = require("./utils/handleLogger");
+
 
 // llamado a la funcion de conexion de bd
 const dbConnect = require('./config/mongo');
@@ -18,6 +22,16 @@ app.use(cors())
 // hace que funcione el express 
 app.use(express.json());
 app.use(express.static("storage")); // le estamos diciendo a express que ocupe los recursos de storage y los haga publico
+
+// haremos que morgan empiece a funcionar
+morganBody(app,{
+    nocolors:true,
+    stream:loggerStream,
+    skip: function(req, res){
+        return res.statusCode < 400;
+    }
+})
+
 
 const port = process.env.PORT || 3000
 // de esta forma llamamos a las variables de entorno con process.env.PORT

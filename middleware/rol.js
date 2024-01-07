@@ -7,8 +7,10 @@ const { handleHttpError } = require("../utils/handleError");
 const checkRol = (roles) => (req, res, next) => {
   try {
     const { user } = req;
+    console.log(user)
     const rolesByUser = user.role; //TODO ["user"]
     //TODO: ["admin","manager"]
+    // se comprara entre arrays para validar que el rol que asigne en ruta es el rol que tiene el usuario
     const checkValueRol = roles.some((rolSingle) =>
       rolesByUser.includes(rolSingle)
     ); //TODO: true, false
