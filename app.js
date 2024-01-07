@@ -8,9 +8,17 @@ const cors = require("cors")
 const morganBody = require("morgan-body");
 const loggerStream = require("./utils/handleLogger");
 
+// agregamos configuracion de swagger ui
+const swaggerUI = require("swagger-ui-express")
+const openApiConfigration = require("./docs/swagger")
+
+// definimos el motor de base de datos
+const ENGINE_DB = process.env.ENGINE_DB;
+
 
 // llamado a la funcion de conexion de bd
-const dbConnect = require('./config/mongo');
+const dbConnectNoSql = require('./config/mongo');
+const {dbConnectMySql} = require('./config/mysql');
 
 const app = express()
 
@@ -38,6 +46,11 @@ const port = process.env.PORT || 3000
 //const port = 3000
 // aca definimos el puerto (proximamente se cambiara a la variables de entorno)
 
+// creamos el apartado del server para swagger ui
+app.use('/documentation',
+ swaggerUI.serve, 
+ swaggerUI.setup(openApiConfigration))
+
 /**
  * Aqui invocamos a las rutas! 😎
  *  
@@ -48,4 +61,4 @@ app.listen(port, () => {
     console.log('Tu app esta corriendo en http://localhost:'+port)
 })
 
-dbConnect();
+ENGINE_DB === 'nosql' ? dbConnectNoSql() : dbConnectMySql();

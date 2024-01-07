@@ -2,10 +2,14 @@
 // para este caso usare bd no relacional pero tambien se hara con una relacional
 // generamos un objeto de modelos e importamos sus modelos correspondientes
 
+const ENGINE_DB = process.env.ENGINE_DB;
+
+const pathModels = ENGINE_DB === "nosql" ? "./nosql" : "./mysql";
+
 const models = {
-    usersModel: require('./nosql/users'),
-    tracksModel: require('./nosql/tracks'),
-    storageModel: require('./nosql/storage'),
+  usersModel: require(`${pathModels}/users`),
+  tracksModel: require(`${pathModels}/tracks`),
+  storageModel: require(`${pathModels}/storage`),
 };
 
 module.exports = models;
